@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl))
+
 (defgroup toggle-test nil
   "IntelliJ like facility to quickly toggle between source and its corresponding test files."
   :group 'convenience
@@ -196,7 +198,7 @@ One entry per project that provides naming convention and folder structure"
 	 (and (>= (length file-name) (length dir-name)) 
 	      (string= (substring file-name 0 (length dir-name)) dir-name))) 'nil))
 
-
+(provide 'toggle-test)
 ;;;;;;;;;;;;;;;;;;;;;;; TESTS ;;;;;;;;;;;;;;;;;;;;;
 
 (defun setup-test-projects ()
