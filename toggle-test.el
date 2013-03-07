@@ -87,7 +87,7 @@ One entry per project that provides naming convention and folder structure"
 
 (defun tgt-all-toggle-paths (rel-path proj dir-type file-names-generator)
   (tgt-make-full-paths 
-   (tgt-possible-dirs proj dir-type (file-name-directory rel-path)) 
+   (tgt-possible-dirs proj dir-type (or (file-name-directory rel-path) "")) 
    (funcall file-names-generator 
 			(file-name-nondirectory rel-path) 
 			(tgt-proj-prop :test-prefixes proj) 
@@ -189,7 +189,9 @@ One entry per project that provides naming convention and folder structure"
 		 (t (tgt-show-matches matches exact-match-p))))))
 
 (defun tgt-toggle ()
-  (tgt-open (tgt-find-match (file-truename buffer-file-name))))
+  (interactive)
+  (if (and buffer-file-truename (file-regular-p buffer-file-truename)) 
+	  (tgt-open (tgt-find-match (buffer-file-truename)))))
 
 (defun tgt-is-ancestor-p (dir file)
   (if (and dir file (> (length file) 0) (> (length dir) 0))
@@ -340,6 +342,9 @@ One entry per project that provides naming convention and folder structure"
 	(should (equal '("/tmp/projects/python-proj/src/foo/blah.py")
 				   (tgt-all-toggle-paths "foo/test_blah.py" py-proj 
 										 :src-dirs #'tgt-possible-src-file-names)))
+	(should (equal '("/tmp/projects/python-proj/tests/test_foo.py")
+				   (tgt-all-toggle-paths "foo.py" py-proj 
+										 :test-dirs #'tgt-possible-test-file-names)))
 	(should (equal 
 			 '("/tmp/projects/scala-proj/foo-module/tests/foo/bar/Blah$Test.scala" 
 			   "/tmp/projects/scala-proj/foo-module/tests/foo/bar/BlahTest.scala"
@@ -373,6 +378,4 @@ One entry per project that provides naming convention and folder structure"
 	(should (equal 
 			 `(,t (,file2 ,file1)) 
 			 (tgt-best-matches (list file2 "/doesnt-exist/1" file1))))))
-
-
 
