@@ -1,3 +1,33 @@
+;;; test-toggle.el --- Toggle between source and test files, create files if required.
+
+;; Copyright (C) 2013 Raghunandan Rao
+
+;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
+;; Keywords: tdd test toggle productivity
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+;; Toggle test provides IntelliJ like test toggle functionality. It presents
+;; the user with choices in case there are multiple macthes (Ex: You have 
+;; integration and unit test for the same source file ). It created the file 
+;; (test or source), along with the entire directory hierarchy if the file does
+;; not exist.
+
+
+2;;; Code:
+
 (eval-when-compile (require 'cl))
 
 (defgroup toggle-test nil
