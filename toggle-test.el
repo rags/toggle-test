@@ -38,7 +38,7 @@ One entry per project that provides naming convention and folder structure"
   :type 'boolean)
 
 (defun tgt-proj-prop (prop proj) (cdr (assoc prop proj)))
-(defun tgt-root-dir (proj) (car (tgt-proj-prop :root-dir proj)))
+(defun tgt-root-dir (proj) (file-truename (car (tgt-proj-prop :root-dir proj))))
 
 (defun tgt-relative-file-path (file proj dir-type) 
   (reduce 
@@ -62,6 +62,7 @@ One entry per project that provides naming convention and folder structure"
     (if src-file-rel-path 
 	(values src-file-rel-path 'nil)
       (values 'nil (tgt-relative-file-path file proj :test-dirs)))))
+
 
 (defun tgt-find-match (file) 
   (let ((proj (tgt-proj-for file)))
@@ -190,8 +191,8 @@ One entry per project that provides naming convention and folder structure"
 
 (defun tgt-toggle ()
   (interactive)
-  (if (and buffer-file-truename (file-regular-p buffer-file-truename)) 
-	  (tgt-open (tgt-find-match (buffer-file-truename)))))
+  (if buffer-file-truename  
+	  (tgt-open (tgt-find-match buffer-file-truename))))
 
 (defun tgt-is-ancestor-p (dir file)
   (if (and dir file (> (length file) 0) (> (length dir) 0))
@@ -221,34 +222,34 @@ One entry per project that provides naming convention and folder structure"
   (multiple-value-bind (scala-proj py-proj) (setup-test-projects)
     (should (string= "Foo.scala" 
 		     (tgt-relative-file-path 
-		      "/tmp/projects/scala-proj/foo-module/src/Foo.scala" 
+		      (file-truename "/tmp/projects/scala-proj/foo-module/src/Foo.scala") 
 		      scala-proj :src-dirs)))
     (should (string= "bar/" (tgt-relative-file-path 
-			     "/tmp/projects/scala-proj/foo-module/src/bar/" 
+			     (file-truename "/tmp/projects/scala-proj/foo-module/src/bar/") 
 			     scala-proj :src-dirs)))
     (should (string= "Blah.scala" (tgt-relative-file-path 
-				   "/tmp/projects/scala-proj/play/app/Blah.scala" 
+				   (file-truename "/tmp/projects/scala-proj/play/app/Blah.scala") 
 				   scala-proj :src-dirs)))
     (should (string= "bar/Blah.scala" 
 		     (tgt-relative-file-path 
-		      "/tmp/projects/scala-proj/foo-module/src/bar/Blah.scala" 
+		      (file-truename "/tmp/projects/scala-proj/foo-module/src/bar/Blah.scala") 
 		      scala-proj :src-dirs)))
     (should-not (tgt-relative-file-path 
-	     "/tmp/projects/scala-proj/play/app1/Blah.scala" 
+	     (file-truename "/tmp/projects/scala-proj/play/app1/Blah.scala") 
 	     scala-proj :src-dirs))
     (should-not (tgt-relative-file-path 
-	     "/tmp/projects/scala-proj/foo-module/src/bar/Blah.scala" 
+	     (file-truename "/tmp/projects/scala-proj/foo-module/src/bar/Blah.scala") 
 	     scala-proj :test-dirs))
     (should-not (tgt-relative-file-path 
-	     "/tmp/projects/python-proj/src/foo.py" 
+	     (file-truename "/tmp/projects/python-proj/src/foo.py") 
 	     scala-proj :src-dirs))
     (should (string= "src/tests_foo.py"
 		     (tgt-relative-file-path 
-		      "/tmp/projects/python-proj/tests/src/tests_foo.py" 
+		      (file-truename "/tmp/projects/python-proj/tests/src/tests_foo.py") 
 		      py-proj :test-dirs)))
     (should (string= "controllers/" 
 		     (tgt-relative-file-path 
-		      "/tmp/projects/python-proj/tests/controllers/" 
+		      (file-truename "/tmp/projects/python-proj/tests/controllers/") 
 		      py-proj :test-dirs)))))
 
 (ert-deftest should-indentify-ancestor ()
@@ -262,11 +263,13 @@ One entry per project that provides naming convention and folder structure"
 
 (ert-deftest should-identify-the-project-given-a-file ()
   (setq tgt-projects '())
-  (add-to-list 'tgt-projects '((:root-dir "/foo/blah")))
+  (add-to-list 'tgt-projects '((:root-dir "/foo/blah-3.3")))
   (add-to-list 'tgt-projects '((:root-dir "/foo/bar/baz/")))
   (add-to-list 'tgt-projects '((:root-dir "/blah/bar//..")))
-  (should (equal '((:root-dir "/foo/blah")) (tgt-proj-for "/foo/blah/bar.el")))
-  (should (equal '((:root-dir "/foo/blah")) (tgt-proj-for "/foo/blah/baz/bar.el")))
+  (add-to-list 'tgt-projects '((:root-dir "c:/foo")))
+  (should (equal '((:root-dir "c:/foo")) (tgt-proj-for "c:/foo/blah/bar.el")))
+  (should (equal '((:root-dir "/foo/blah-3.3")) (tgt-proj-for "/foo/blah-3.3/bar.el")))
+  (should (equal '((:root-dir "/foo/blah-3.3")) (tgt-proj-for "/foo/blah-3.3/baz/bar.el")))
   (should-not  (tgt-proj-for "/foo/blah.el"))
 
   (should (equal '((:root-dir "/foo/bar/baz/")) (tgt-proj-for "/foo/bar/baz/foo/bar")))
@@ -336,35 +339,71 @@ One entry per project that provides naming convention and folder structure"
 
 (ert-deftest should-generate-all-possible-toggle-paths ()
   (multiple-value-bind (scala-proj py-proj) (setup-test-projects) 
-	(should (equal '("/tmp/projects/python-proj/tests/foo/test___init__.py")
+	(should (equal (list (file-truename 
+						  "/tmp/projects/python-proj/tests/foo/test___init__.py"))
 				   (tgt-all-toggle-paths "foo/__init__.py" py-proj 
 										 :test-dirs #'tgt-possible-test-file-names)))
-	(should (equal '("/tmp/projects/python-proj/src/foo/blah.py")
+	(should (equal (list (file-truename
+						  "/tmp/projects/python-proj/src/foo/blah.py"))
 				   (tgt-all-toggle-paths "foo/test_blah.py" py-proj 
 										 :src-dirs #'tgt-possible-src-file-names)))
-	(should (equal '("/tmp/projects/python-proj/tests/test_foo.py")
+	(should (equal (list 
+					(file-truename "/tmp/projects/python-proj/tests/test_foo.py"))
 				   (tgt-all-toggle-paths "foo.py" py-proj 
 										 :test-dirs #'tgt-possible-test-file-names)))
+	
 	(should (equal 
-			 '("/tmp/projects/scala-proj/foo-module/tests/foo/bar/Blah$Test.scala" 
-			   "/tmp/projects/scala-proj/foo-module/tests/foo/bar/BlahTest.scala"
-			   "/tmp/projects/scala-proj/foo-module/tests/foo/bar/BlahSpec.scala" 
-			   "/tmp/projects/scala-proj/foo-module/tests/foo/bar/Blah$Spec.scala"
-			   "/tmp/projects/scala-proj/play/specs/foo/bar/Blah$Test.scala" 
-			   "/tmp/projects/scala-proj/play/specs/foo/bar/BlahTest.scala"
-			   "/tmp/projects/scala-proj/play/specs/foo/bar/BlahSpec.scala" 
-			   "/tmp/projects/scala-proj/play/specs/foo/bar/Blah$Spec.scala"
-			   "/tmp/projects/scala-proj/integration-specs/foo/bar/Blah$Test.scala"
-			   "/tmp/projects/scala-proj/integration-specs/foo/bar/BlahTest.scala"
-			   "/tmp/projects/scala-proj/integration-specs/foo/bar/BlahSpec.scala"
-			   "/tmp/projects/scala-proj/integration-specs/foo/bar/Blah$Spec.scala")
-			 (tgt-all-toggle-paths "foo/bar/Blah.scala" scala-proj 
-								   :test-dirs #'tgt-possible-test-file-names)))
-	(should (equal 
-			 '("/tmp/projects/scala-proj/foo-module/src/controllers/Blah.scala" 
-			   "/tmp/projects/scala-proj/play/app/controllers/Blah.scala")  
+			 (list (file-truename 
+					"/tmp/projects/scala-proj/foo-module/src/controllers/Blah.scala") 
+			   (file-truename 
+				"/tmp/projects/scala-proj/play/app/controllers/Blah.scala"))  
 			 (tgt-all-toggle-paths "controllers/BlahTest.scala" scala-proj 
 							   :src-dirs #'tgt-possible-src-file-names)))))
+
+(ert-deftest should-find-all-matches ()
+  (multiple-value-bind (scala-proj py-proj) (setup-test-projects) 
+	
+	(let ((msg "")) 
+	  ;Mock message 
+	  (flet ((message (str &rest args) (setq msg (apply 'format (cons str args)))))
+
+	   (should-not (tgt-find-match (file-truename "/not-configured-proj/src/foo.py")))
+	   (should (string= (concat "File '/not-configured-proj/src/foo.py' not part of" 
+						   " any project. Have you defined a project?")
+					  msg))
+	   
+	   (should-not (tgt-find-match
+					(file-truename "/tmp/projects/python-proj/build/foo.py")))
+	   (should (string= (format 
+					   "File '%s' in project '%s' is not part src-dirs or test-dirs"
+							  (file-truename "/tmp/projects/python-proj/build/foo.py")
+							  (file-truename "/tmp/projects/python-proj")) 
+						msg))))
+
+	(should (equal `(,(file-truename "/tmp/projects/python-proj/src/foo/blah.py"))
+				   (tgt-find-match
+					(file-truename "/tmp/projects/python-proj/tests/foo/test_blah.py"))))
+	(should (equal `(,(file-truename "/tmp/projects/python-proj/tests/test_foo.py"))
+				   (tgt-find-match 
+					(file-truename "/tmp/projects/python-proj/src/foo.py"))))
+	(should (equal 
+			 (mapcar 
+			  #'file-truename 
+			  '("/tmp/projects/scala-proj/foo-module/tests/foo/bar/Blah$Test.scala" 
+				"/tmp/projects/scala-proj/foo-module/tests/foo/bar/BlahTest.scala"
+				"/tmp/projects/scala-proj/foo-module/tests/foo/bar/BlahSpec.scala" 
+				"/tmp/projects/scala-proj/foo-module/tests/foo/bar/Blah$Spec.scala"
+				"/tmp/projects/scala-proj/play/specs/foo/bar/Blah$Test.scala" 
+				"/tmp/projects/scala-proj/play/specs/foo/bar/BlahTest.scala"
+				"/tmp/projects/scala-proj/play/specs/foo/bar/BlahSpec.scala" 
+				"/tmp/projects/scala-proj/play/specs/foo/bar/Blah$Spec.scala"
+				"/tmp/projects/scala-proj/integration-specs/foo/bar/Blah$Test.scala"
+				"/tmp/projects/scala-proj/integration-specs/foo/bar/BlahTest.scala"
+				"/tmp/projects/scala-proj/integration-specs/foo/bar/BlahSpec.scala"
+				"/tmp/projects/scala-proj/integration-specs/foo/bar/Blah$Spec.scala"))
+			 (tgt-find-match 
+			  (file-truename 
+			   "/tmp/projects/scala-proj/foo-module/src/foo/bar/Blah.scala"))))))
 
 (ert-deftest should-filter-existing-files ()  
   (should (equal `(,'nil ,'nil) (tgt-best-matches 'nil)))
@@ -378,4 +417,65 @@ One entry per project that provides naming convention and folder structure"
 	(should (equal 
 			 `(,t (,file2 ,file1)) 
 			 (tgt-best-matches (list file2 "/doesnt-exist/1" file1))))))
+
+(defun click (txt)
+  (catch 'break
+	(while t
+	  (forward-button 1)						
+	  (print (button-label (button-at (point))))
+	  (if (string= (button-label (button-at (point))) txt)
+		  (progn 
+			(push-button)
+			(throw 'break 'nil))))))
+
+;;End to end/Integration test
+(ert-deftest should-toggle ()
+  (let ((root (make-temp-file "foo" t)))
+	(setq tgt-projects 'nil)
+	(add-to-list 'tgt-projects 
+				 `((:root-dir ,root) 
+				   (:src-dirs "src") 
+				   (:test-dirs "unit-specs" "integration-specs" ) 
+				   (:test-suffixes "$Spec")))
+	
+	(mkdir (expand-file-name "src" root) t)
+	(find-file (expand-file-name "src/Foo.scala" root))
+;;  toggle for <root>/src/Foo.scala => <root>/unit-specs/Foo$Spec.scala
+;;                                     <root>/functional-specs/Foo$Spec.scala
+;;  Should present the choices
+;;  select <root>/unit-specs/Foo$Spec.scala
+	(let ((tgt-open-in-new-window 'nil)) 
+	  (tgt-toggle)
+	  (should (equal "*Toggle Test*" (buffer-name)))
+	  (click (file-truename (expand-file-name "unit-specs/Foo$Spec.scala" root)))
+	  (should (file-directory-p (expand-file-name "unit-specs/" root)))
+	  (should (equal buffer-file-truename 
+					 (file-truename (expand-file-name "unit-specs/Foo$Spec.scala" root))))
+	  (save-buffer)
+	  (find-file (expand-file-name "src/Foo.scala" root))
+	  (tgt-toggle)
+	  (should (equal buffer-file-truename 
+					 (file-truename (expand-file-name "unit-specs/Foo$Spec.scala" root)))))
+	
+;;  toggle for <root>/src/Blah.scala => <root>/unit-specs/Blah$Spec.scala
+;;                                     <root>/functional-specs/Blah$Spec.scala
+;;  present the choices. select <root>/integration-specs/Blah$Spec.scala
+;;
+;;  toggleing from <root>/integration-specs/Blah$Spec.scala should directly take you 
+;;  src without any prompts
+	
+	(find-file (expand-file-name "src/Blah.scala" root))
+	(save-buffer)
+	(let ((tgt-open-in-new-window t)) 
+	  (tgt-toggle)
+	  (should (equal "*Toggle Test*" (buffer-name)))
+	  (click (file-truename (expand-file-name "integration-specs/Blah$Spec.scala" root)))
+	  (should (file-directory-p (expand-file-name "integration-specs/" root)))
+	  (should (equal buffer-file-truename 
+					 (file-truename 
+					  (expand-file-name "integration-specs/Blah$Spec.scala" root))))
+	  (tgt-toggle)
+	  (should (equal buffer-file-truename 
+					 (file-truename 
+					  (expand-file-name "src/Blah.scala" root)))))))
 
