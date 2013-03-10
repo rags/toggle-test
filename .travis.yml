@@ -20,7 +20,7 @@ before_install:
     fi
 env:
   - EMACS=emacs24
-  - EMACS=emacs-snapshot
+#  - EMACS=emacs-snapshot
 script:
   - emacs --version
   - emacs -batch -L . -l ert -l test-toggle-test.el -f ert-run-tests-batch-and-exit
