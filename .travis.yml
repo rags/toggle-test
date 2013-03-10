@@ -8,6 +8,8 @@ before_install:
       echo `pwd` && 
       wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert.el &&
       wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/cl-lib.el &&
+      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/cl-macs.el &&
+      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/cl.el &&
       wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert-x.el;
     fi
   - if [ "$EMACS" = 'emacs24' ]; then
