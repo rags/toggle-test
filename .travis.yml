@@ -20,4 +20,4 @@ env:
   - EMACS=emacs-snapshot
 script:
   - emacs --version
-  - emacs -batch -l ert -l test-toggle-test.el -f ert-run-tests-batch-and-exit
+  - emacs -batch -L . -l ert -l test-toggle-test.el -f ert-run-tests-batch-and-exit
