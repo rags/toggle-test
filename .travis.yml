@@ -11,9 +11,9 @@ before_install:
       sudo apt-get update -qq &&
       sudo apt-get install -qq
           emacs24 emacs24-el;
-      echo `pwd` 																	  
-      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert.el
-      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert-x.el
+      echo `pwd`;
+      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert.el;
+      wget https://github.com/mirrors/emacs/raw/master/lisp/emacs-lisp/ert-x.el;
     fi
 env:
   - EMACS=emacs24
