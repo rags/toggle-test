@@ -35,24 +35,29 @@ Configuring
 **tgt-projects:**
 
 Once you have installed the extension you can start configuring toggle test by adding your projects. 
-This configuration allows 
+This configuration allows Toggle Test to understand the project structure and naming conventions.
+
 ```lisp
   (add-to-list 'tgt-projects '((:root-dir <root directory of project>)
                               (:src-dirs <list source folders relative to root>) 
                               (:test-dirs <list of test folders relative to root>)
                               (:test-prefixes <optional list of prefix strings that are added on source file names 
                                             to get test file names>)
-                              (:test-prefixes <optional list of suffix strings that are added on source file names 
-                                            to get test file names>)))
+                              (:test-suffixes <optional list of suffix strings without the file extension>))) 
 ```
-**tgt-open-in-new-window:**
 
-This setting controls where the toggle file opens up. A non nil value opens toggle file in a new window, 
-so you do a side-by-side edit of source and test files. A nil value replaces the current window content. 
-The default value is **t**  
-```lisp
-  (setq tgt-open-in-new-window <'nil or t>)
-```
+Each project that you configure is an alist with *:root-dir, :src-dirs, :test-dirs* as mandatory and 
+*:test-prefixes, :test-suffixes* as optional entries. 
+
+**Assumptions:** Test Toggle makes 2 assumptions about the all projects defined. These are not tricky assumptions 
+most projects have folder organization and naming conventions that complement these assumptions
+
+* The test and source directory structure (tree hierarchy) is similar.
+* The test file name can be derived by adding some prefix or suffix to source file name. 
+
+  Ex: if the source file is src/controllers/user_contoller.py then the test is 
+      test/controllers/user_controller_test.py. Note that the :test-suffixes here is "_test"
+
 
 **Basic Example**
 - - - - - - - - -
@@ -67,7 +72,7 @@ py-proj
 `-- tests
     `-- test_foo.py
 ```
-The configuration would look loke this
+The configuration for this project would look look this
 ```lisp
 (add-to-list 'tgt-projects '((:root-dir "~/py-proj")
                               (:src-dirs "src") 
@@ -75,5 +80,87 @@ The configuration would look loke this
                               (:test-prefixes "test_")))
 ```
 
-**Assumption:** Test Toggle makes 2 assumptions about the all projects defined
-Adding new projects vs adding new src/test directories
+**A more involved example**
+- - - - - - - - - - - - -
+This is a project that has 3 modules a scala library, java library and a scala Play application.
+```
+polyglot-proj
+|-- bar-lib
+|   |-- src
+|   |   `-- com
+|   |       `-- bar
+|   |           `-- Bar.java
+|   `-- test
+|       `-- com
+|           `-- bar
+|               `-- BarTest.java
+|-- foo-lib
+|   |-- src
+|   |   `-- Foo.scala
+|   `-- test
+|       `-- FooSpec.scala
+|-- integration-specs
+|   |-- Foo$Spec.scala
+|   `-- controllers
+|       `-- Application$Spec.scala
+`-- play
+    |-- app
+    |   `-- controllers
+    |       `-- Application.scala
+    `-- test
+        `-- controllers
+            `-- ApplicationSpec.scala
+
+```
+Based on these observations about the project:
+
+* Scala tests have suffixes **Spec**, **$Spec** and java tests have **Test** suffix.
+* Integration tests for *foo-lib* and play app is in integration-specs.
+* *bar-lib* is an independent/self-contained module that has all tests/source source inside the bar-lib folder.
+* *bar-lib* have a completely different naming convention.
+
+The best configuration for this project is,
+```lisp
+(add-to-list 'tgt-projects '((:root-dir "~/polyglot-proj")
+                              (:src-dirs "play/app" "foo-lib/src") 
+                              (:test-dirs "play/test" "foo-lib/test" "integration-specs")
+                              (:test-suffixes "Spec" "$Spec")))
+(add-to-list 'tgt-projects '((:root-dir "~/polyglot-proj/bar-lib")
+                              (:src-dirs "src") 
+                              (:test-dirs "test")
+                              (:test-suffixes "Test")))
+
+```
+Note that the potential candidates for *foo-lib/src/Foo.scala* are
+* play/test/FooSpec.scala
+* play/test/Foo$Spec.scala
+* foo-lib/test/FooSpec.scala
+* foo-lib/test/Foo$Spec.scala
+* integration-specs/test/FooSpec.scala
+* integration-specs/test/Foo$Spec.scala
+
+But the best match is *foo-lib/test/FooSpec.scala* as this file already exists. 
+
+If this file did not exist, then the user will be presented with all the options and the selected file is automatically 
+created.
+
+
+**Adding new projects vs adding new src/test directories:**
+
+Note that in the configuration in second exmaple defines separate project for *bar-lib*, while *foo-lib* 
+is just extra entries in *:src-dirs* and *:test-dirs*. It is recommended that you define many smaller projects 
+whenever possible. If a module is independent and contains all tests inside module directory then it is better 
+to add it as a separate tgt-project. A separate project cannot be defined in case of *foo-lib* because 
+integration-specs depends on both *foo-lib* and Play application 
+
+
+**tgt-open-in-new-window:**
+
+This setting controls where the toggle file opens up. A non nil value opens toggle file in a new window, 
+so you do a side-by-side edit of source and test files. A nil value replaces the current window content. 
+The default value is **t**  
+```lisp
+  (setq tgt-open-in-new-window <'nil or t>)
+```
+
+
