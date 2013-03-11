@@ -5,6 +5,7 @@
   "Should handle sub-projects and return subproject for files inside subproject"
   (setq tgt-projects '(((:root-dir "/my/proj"))
 					   ((:root-dir "/my/proj/module1"))
+					   ((:root-dir "/my/proj/module1/submodule"))
 					   ((:root-dir "/my/proj/module2"))))
   (should (equal '((:root-dir "/my/proj")) 
 				 (tgt-proj-for "/my/proj/src/foo.el")))
@@ -14,6 +15,8 @@
 				 (tgt-proj-for "/my/proj/module1.yml")))
   (should (equal '((:root-dir "/my/proj/module2")) 
 				 (tgt-proj-for "/my/proj/module2/foo.el")))
+  (should (equal '((:root-dir "/my/proj/module1/submodule")) 
+				 (tgt-proj-for "/my/proj/module1/submodule/src/blah")))
   (should (equal '((:root-dir "/my/proj/module1")) 
 				 (tgt-proj-for "/my/proj/module1/tests/foo-test.el"))))
 
@@ -173,7 +176,17 @@
 			 (tgt-all-toggle-paths "controllers/BlahTest.scala" scala-proj 
 							   :src-dirs #'tgt-possible-src-file-names)))))
 
+(ert-deftest should-handle-test-with-no-prefix-suffix ()
+  (setq tgt-projects '(((:root-dir "/projects") 
+						(:test-dirs "tests") 
+						(:src-dirs "src"))))
+  (should (equal '("/projects/tests/blah/bar.py") 
+				 (tgt-find-match "/projects/src/blah/bar.py")))
+  (should (equal '("/projects/src/foo.py") 
+				 (tgt-find-match "/projects/tests/foo.py"))))
+
 (ert-deftest should-find-all-matches ()
+  "tests the top level matching function"
   (multiple-value-bind (scala-proj py-proj) (setup-test-projects) 
 	
 	(let ((msg "")) 
@@ -231,6 +244,9 @@
 			 `(,t (,file2 ,file1)) 
 			 (tgt-best-matches (list file2 "/doesnt-exist/1" file1))))))
 
+
+
+;;End to end/Integration test
 (defun click (txt)
   (catch 'break
 	(while t
@@ -240,7 +256,6 @@
 			(push-button)
 			(throw 'break 'nil))))))
 
-;;End to end/Integration test
 (ert-deftest should-toggle ()
   (let ((root (make-temp-file "foo" t)))
 	(setq tgt-projects 'nil)

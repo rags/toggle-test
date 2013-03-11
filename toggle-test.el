@@ -96,6 +96,8 @@ One entry per project that provides naming convention and folder structure"
   (length (split-string (file-name-as-directory (tgt-root-dir proj)) "/")))
 
 (defun tgt-find-project-file-in-dirs (file proj)
+  (assert (tgt-proj-prop :src-dirs proj) 'nil "Source directory not configured")
+  (assert (tgt-proj-prop :test-dirs proj) 'nil "Test directory not configured")
   (let ((src-file-rel-path (tgt-relative-file-path file proj :src-dirs)))
     (if src-file-rel-path 
 	(values src-file-rel-path 'nil)
