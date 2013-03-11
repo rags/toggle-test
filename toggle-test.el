@@ -26,7 +26,7 @@
 ;; not exist.
 
 
-2;;; Code:
+;;; Code:
 
 (eval-when-compile (require 'cl))
 
@@ -47,10 +47,10 @@
 ;;    Note: you can specify both prefix and suffix if required.
 ;;
 ;; Usage:
-;; (add-to-list tgt-projects '((:root-dir "~/python-project") 
+;; (add-to-list 'tgt-projects '((:root-dir "~/python-project") 
 ;;                             (:src-dirs "src") (:test-dirs "tests") 
 ;;                             (:test-prefixes "test-")))          
-;; (add-to-list tgt-projects '((:root-dir "~/scala-project") 
+;; (add-to-list 'tgt-projects '((:root-dir "~/scala-project") 
 ;;                             (:src-dirs "src") (:test-dirs "specs") 
 ;;                             (:test-suffixes "$Spec")))
 (defcustom tgt-projects '() 
@@ -82,10 +82,18 @@ One entry per project that provides naming convention and folder structure"
    :initial-value 'nil))
 
 ;; Given a file return its project 
-;; (returns first match. Doesnt handle sub directories added as different project)
 (defun tgt-proj-for (file)
-  (car (remove-if-not
+  (tgt-best-project (remove-if-not
 		(lambda (proj) (tgt-is-ancestor-p (tgt-root-dir proj) file)) tgt-projects)))
+
+(defun tgt-best-project (projects)
+  (if projects 
+	  (reduce (lambda (res proj) 
+				(if (> (tgt-root-depth proj) (tgt-root-depth res)) proj res)) projects)
+	'nil))
+
+(defun tgt-root-depth (proj)
+  (length (split-string (file-name-as-directory (tgt-root-dir proj)) "/")))
 
 (defun tgt-find-project-file-in-dirs (file proj)
   (let ((src-file-rel-path (tgt-relative-file-path file proj :src-dirs)))

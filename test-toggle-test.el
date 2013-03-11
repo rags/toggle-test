@@ -1,6 +1,22 @@
 (load-file "toggle-test.el")
 (require 'toggle-test)
 
+(ert-deftest should-find-best-matching-project ()
+  "Should handle sub-projects and return subproject for files inside subproject"
+  (setq tgt-projects '(((:root-dir "/my/proj"))
+					   ((:root-dir "/my/proj/module1"))
+					   ((:root-dir "/my/proj/module2"))))
+  (should (equal '((:root-dir "/my/proj")) 
+				 (tgt-proj-for "/my/proj/src/foo.el")))
+  (should (equal '((:root-dir "/my/proj")) 
+				 (tgt-proj-for "/my/proj/module3/test/test-foo.el")))
+  (should (equal '((:root-dir "/my/proj")) 
+				 (tgt-proj-for "/my/proj/module1.yml")))
+  (should (equal '((:root-dir "/my/proj/module2")) 
+				 (tgt-proj-for "/my/proj/module2/foo.el")))
+  (should (equal '((:root-dir "/my/proj/module1")) 
+				 (tgt-proj-for "/my/proj/module1/tests/foo-test.el"))))
+
 (defun setup-test-projects ()
   (setq tgt-projects '())
   (add-to-list 'tgt-projects 
