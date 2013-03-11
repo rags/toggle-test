@@ -9,7 +9,7 @@ source), along with the entire directory hierarchy if the file does not exist.
 
 Installing
 -----------
-To get test toggle. Simply get the code from github.
+To install test toggle. Simply get the code from github.
 ```bash
 git clone git://github.com/rags/toggle-test.git
 ```
@@ -25,7 +25,8 @@ And add the following lines to your [initialization file](http://www.gnu.org/sof
 ```
 
 **Recommended key binding**
-This is the recommended key binding for test toggle.
+
+This is the recommended key binding for toggle test.
 ```lisp
 (global-set-key (kbd "C-c t") 'tgt-toggle)
 ```
@@ -163,4 +164,17 @@ The default value is **t**
   (setq tgt-open-in-new-window <'nil or t>)
 ```
 
+Contributing
+--------------------------
+* Feel free to [fork](https://help.github.com/articles/fork-a-repo) the [repo](https://github.com/rags/toggle-test), 
+make changes and raise [pull request](https://help.github.com/articles/using-pull-requests) once you are done. 
+Toggle Test uses [ert](http://www.gnu.org/software/emacs/manual/html_mono/ert.html) for unit/intergration tests. 
+Keep them green. Test your changes.
+* Report any bugs and feature requests in the [issues section](https://github.com/rags/toggle-test/issues)
+
+License
+--------
+[GNU General Public License](http://www.gnu.org/licenses/)
+
+Copyright (C) 2013 [Raghunandan Rao](mailto:r.raghunandan@gmail.com)
 
