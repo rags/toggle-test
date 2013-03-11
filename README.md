@@ -5,6 +5,8 @@ Toggle test provides IntelliJ like test toggle functionality. It presents the us
 multiple macthes (Ex: You have integration and unit test for the same source file ). It created the file (test or 
 source), along with the entire directory hierarchy if the file does not exist.
 
+
+
 Installing
 -----------
 To get test toggle. Simply get the code from github.
@@ -72,3 +74,6 @@ The configuration would look loke this
                               (:test-dirs "tests")
                               (:test-prefixes "test_")))
 ```
+
+**Assumption:** Test Toggle makes 2 assumptions about the all projects defined
+Adding new projects vs adding new src/test directories
