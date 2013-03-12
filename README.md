@@ -1,10 +1,18 @@
 Toggle Test [![Build Status](https://travis-ci.org/rags/toggle-test.png?branch=master)](https://travis-ci.org/rags/toggle-test)
 ===========
 
-Toggle test provides IntelliJ like test toggle functionality.  
-It presents the user with choices in case there are multiple matches (Ex: You have integration and unit test for the same source file ). 
-It creates the file (test or source), along with the entire directory hierarchy if the file does not exist.
+Toggle Test allows you quick between test and source files. This is a very useful feature to have when you are [TDD](http://en.wikipedia.org/wiki/Test-driven_development)ing.
+Test Toggle is similar to test toggle functionality provided by IntelliJ/pycharm/resharper.
 
+**Features:**
+* Test Toggle allows you quick navigate between test and source files, without having to remember file paths.
+* It creates the the test or source file you are trying to navigate to (along the entire directory hierarchy) 
+  if it does not already exist.
+* Sometimes there might be mutiple test files for a given source (Ex: Unit and Integration test). Test Toggle 
+  presents the user with choices whenever there is multiple matches and navigates to the chosen file 
+  (creating it of required).
+* Test Toggle is language/tech stack agnostic. So it can work with your rails, python, scala or any other project.
+* You can work with multiple such projects at the same time.
 
 
 Installing
@@ -32,11 +40,15 @@ This is the recommended key binding for toggle test.
 ```
 
 Configuring
------------
+------------
+Before you can start using Test Toggle you need to tell Test Toggle about your projects, you can do this by configuring 
+the variable *tgt-projects*. The other optional configuration is *tgt-open-in-new-window* which controls where the 
+files are opened. The rest of this section describes these 2 variables.
+
 **tgt-projects:**
 
-Once you have installed the extension you can start configuring toggle test by adding your projects. 
-This configuration allows Toggle Test to understand the project structure and naming conventions.
+This configuration allows Toggle Test to understand the project structure and naming conventions. tgt-projects is a list 
+where each item is a project configuration. Here is how you add to this list.
 
 ```lisp
   (add-to-list 'tgt-projects '((:root-dir <root directory of project>)
