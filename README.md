@@ -181,8 +181,8 @@ Contributing
 * Feel free to [fork](https://help.github.com/articles/fork-a-repo) the [repo](https://github.com/rags/toggle-test), 
 make changes and raise [pull request](https://help.github.com/articles/using-pull-requests) once you are done. 
 Toggle Test uses [ert](http://www.gnu.org/software/emacs/manual/html_mono/ert.html) for unit/intergration tests. 
-Keep them green. Test your changes.
-* Report any bugs or feature requests in the [issues section](https://github.com/rags/toggle-test/issues)
+Keep them green and test your changes.
+* You can also contribute by reporting any bugs or feature requests in the [issues section](https://github.com/rags/toggle-test/issues)
 
 License
 --------
