@@ -1,8 +1,8 @@
 Toggle Test [![Build Status](https://travis-ci.org/rags/toggle-test.png?branch=master)](https://travis-ci.org/rags/toggle-test)
 ===========
 
-Toggle Test allows you quick between test and source files. This is a very useful feature to have when you are [TDD](http://en.wikipedia.org/wiki/Test-driven_development)ing.
-Test Toggle is similar to test toggle functionality provided by IntelliJ/pycharm/resharper.
+Toggle Test allows you to quickly switch between test and test subject. This is a very useful tool to have when you are [TDD](http://en.wikipedia.org/wiki/Test-driven_development)ing.
+Test Toggle is similar to test toggle functionality provided by IntelliJ and other JetBrain products.
 
 **Features:**
 * Test Toggle allows you quick navigate between test and source files, without having to remember file paths.
@@ -11,7 +11,7 @@ Test Toggle is similar to test toggle functionality provided by IntelliJ/pycharm
 * Sometimes there might be mutiple test files for a given source (Ex: Unit and Integration test). Test Toggle 
   presents the user with choices whenever there is multiple matches and navigates to the chosen file 
   (creating it of required).
-* Test Toggle is language/tech stack agnostic. So it can work with your rails, python, scala or any other project.
+* Test Toggle is language/tech stack agnostic. So it can work with your Rails, Python, Clojure or any other project.
 * You can work with multiple such projects at the same time.
 
 
