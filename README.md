@@ -2,7 +2,7 @@ Toggle Test [![Build Status](https://travis-ci.org/rags/toggle-test.png?branch=m
 ===========
 
 Toggle Test allows you to quickly switch between test and test subject. This is a very useful tool to have when you are [TDD](http://en.wikipedia.org/wiki/Test-driven_development)ing.
-Test Toggle is similar to test toggle functionality provided by IntelliJ and other JetBrain products.
+Test Toggle is similar to test toggle functionality provided by IntelliJ and other JetBrains IDEs.
 
 **Features:**
 * Test Toggle allows you quick navigate between test and source files, without having to remember file paths.
@@ -182,7 +182,7 @@ Contributing
 make changes and raise [pull request](https://help.github.com/articles/using-pull-requests) once you are done. 
 Toggle Test uses [ert](http://www.gnu.org/software/emacs/manual/html_mono/ert.html) for unit/intergration tests. 
 Keep them green. Test your changes.
-* Report any bugs and feature requests in the [issues section](https://github.com/rags/toggle-test/issues)
+* Report any bugs or feature requests in the [issues section](https://github.com/rags/toggle-test/issues)
 
 License
 --------
