@@ -1,15 +1,15 @@
 Toggle Test [![Build Status](https://travis-ci.org/rags/toggle-test.png?branch=master)](https://travis-ci.org/rags/toggle-test)
 ===========
 
-Toggle test provides IntelliJ like test toggle functionality. It presents the user with choices in case there are 
-multiple macthes (Ex: You have integration and unit test for the same source file ). It created the file (test or 
-source), along with the entire directory hierarchy if the file does not exist.
+Toggle test provides IntelliJ like test toggle functionality.  
+It presents the user with choices in case there are multiple matches (Ex: You have integration and unit test for the same source file ). 
+It creates the file (test or source), along with the entire directory hierarchy if the file does not exist.
 
 
 
 Installing
 -----------
-To install test toggle. Simply get the code from github.
+To install test toggle, simply get the code from github.
 ```bash
 git clone git://github.com/rags/toggle-test.git
 ```
@@ -32,7 +32,7 @@ This is the recommended key binding for toggle test.
 ```
 
 Configuring
--------------
+-----------
 **tgt-projects:**
 
 Once you have installed the extension you can start configuring toggle test by adding your projects. 
@@ -50,8 +50,8 @@ This configuration allows Toggle Test to understand the project structure and na
 Each project that you configure is an alist with *:root-dir, :src-dirs, :test-dirs* as mandatory and 
 *:test-prefixes, :test-suffixes* as optional entries. 
 
-**Assumptions:** Test Toggle makes 2 assumptions about the all projects defined. These are not tricky assumptions 
-most projects have folder organization and naming conventions that complement these assumptions
+**Assumptions:** Test Toggle makes 2 assumptions about the all projects defined. These are not tricky assumptions. 
+Most projects have folder organization and naming conventions that complement these assumptions
 
 * The test and source directory structure (tree hierarchy) is similar.
 * The test file name can be derived by adding some prefix or suffix to source file name. 
@@ -118,7 +118,7 @@ Based on these observations about the project:
 * Scala tests have suffixes **Spec**, **$Spec** and java tests have **Test** suffix.
 * Integration tests for *foo-lib* and play app is in integration-specs.
 * *bar-lib* is an independent/self-contained module that has all tests/source source inside the bar-lib folder.
-* *bar-lib* have a completely different naming convention.
+* *bar-lib* has a completely different naming convention.
 
 The best configuration for this project is,
 ```lisp
@@ -140,7 +140,7 @@ Note that the potential candidates for *foo-lib/src/Foo.scala* are
 * integration-specs/test/FooSpec.scala
 * integration-specs/test/Foo$Spec.scala
 
-But the best match is *foo-lib/test/FooSpec.scala* as this file already exists. 
+The best match is *foo-lib/test/FooSpec.scala* as this file already exists. 
 
 If this file did not exist, then the user will be presented with all the options and the selected file is automatically 
 created.
@@ -148,17 +148,17 @@ created.
 
 **Adding new projects vs adding new src/test directories:**
 
-Note that in the configuration in second exmaple defines separate project for *bar-lib*, while *foo-lib* 
+Note that in the configuration in the second example defines separate projects for *bar-lib*, while *foo-lib* 
 is just extra entries in *:src-dirs* and *:test-dirs*. It is recommended that you define many smaller projects 
 whenever possible. If a module is independent and contains all tests inside module directory then it is better 
 to add it as a separate tgt-project. A separate project cannot be defined in case of *foo-lib* because 
-integration-specs depends on both *foo-lib* and Play application 
+integration-specs depends on both *foo-lib* and the Play application 
 
 
 **tgt-open-in-new-window:**
 
-This setting controls where the toggle file opens up. A non nil value opens toggle file in a new window, 
-so you do a side-by-side edit of source and test files. A nil value replaces the current window content. 
+This setting controls where the toggle file opens up. A non nil value opens the toggle file in a new window, 
+so you can do a side-by-side edit of source and test files. A nil value replaces the current window content. 
 The default value is **t**  
 ```lisp
   (setq tgt-open-in-new-window <'nil or t>)
