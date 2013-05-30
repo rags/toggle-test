@@ -232,7 +232,8 @@ One entry per project that provides naming convention and folder structure"
 (defun tgt-toggle ()
   (interactive)
   (if buffer-file-truename  
-	  (tgt-open (tgt-find-match buffer-file-truename))))
+; expand ~/ with 
+	  (tgt-open (tgt-find-match (file-truename buffer-file-truename)))))
 
 (defun tgt-is-ancestor-p (dir file)
   (if (and dir file (> (length file) 0) (> (length dir) 0))
