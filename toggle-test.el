@@ -1,9 +1,10 @@
-;;; test-toggle.el --- Toggle between source and test files, create files if required.
+;;; toggle-test.el --- Toggle between source and test files, create files if required.
 
 ;; Copyright (C) 2013 Raghunandan Rao
 
 ;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
 ;; Keywords: tdd test toggle productivity
+;; Version: 1.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
