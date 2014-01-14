@@ -1,4 +1,4 @@
-;;; toggle-test.el --- Toggle between source and test files, create files if required.
+;;; toggle-test.el --- Toggle between source and test files. It is language agnostic and creates source/test files if they don't exist.
 
 ;; Copyright (C) 2013 Raghunandan Rao
 
@@ -20,11 +20,14 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; Toggle test provides IntelliJ like test toggle functionality. It presents
+;; Toggle test provides test toggle functionality very similar to Jetbrains 
+;; IDEs like IntelliJ/Rubymine/Pycharm. It presents
 ;; the user with choices in case there are multiple macthes (Ex: You have 
-;; integration and unit test for the same source file ). It created the file 
+;; integration and unit test for the same source file). It creates the file 
 ;; (test or source), along with the entire directory hierarchy if the file does
-;; not exist.
+;; not exist. 
+;; It is language agnostic so you can use it on your rails, django, scala, node.js 
+;; or any other projects.
 
 
 ;;; Code:
