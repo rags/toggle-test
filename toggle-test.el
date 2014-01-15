@@ -5,6 +5,7 @@
 ;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
 ;; Keywords: tdd test toggle productivity
 ;; Version: 1.0.1
+;; Url: https://github.com/rags/toggle-test
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
