@@ -4,7 +4,7 @@
 
 ;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
 ;; Keywords: tdd test toggle productivity
-;; Version: 1.0
+;; Version: 1.0.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,6 +29,9 @@
 ;; It is language agnostic so you can use it on your rails, django, scala, node.js 
 ;; or any other projects.
 
+;;; Change log:
+;; - 1.0 - Initial release
+;; - 1.0.1 - autoloads added
 
 ;;; Code:
 
@@ -57,6 +60,8 @@
 ;; (add-to-list 'tgt-projects '((:root-dir "~/scala-project") 
 ;;                             (:src-dirs "src") (:test-dirs "specs") 
 ;;                             (:test-suffixes "$Spec")))
+
+;;;###autoload
 (defcustom tgt-projects '() 
   "Project entries. 
 One entry per project that provides naming convention and folder structure"
@@ -66,6 +71,8 @@ One entry per project that provides naming convention and folder structure"
 ;; Indicates if the toggle file should be opened in a new window 
 ;; or replace the buffer in current window. The default behavior is to open it in new window
 ;; Use (setq tgt-open-in-new-window 'nil) to override default behavior
+
+;;;###autoload
 (defcustom tgt-open-in-new-window t 
   "Indicates if the files are opened in new window or current window"
   :group 'toggle-test
@@ -233,6 +240,7 @@ One entry per project that provides naming convention and folder structure"
 		 ((= 1 (length matches)) (tgt-open-file (car matches)))
 		 (t (tgt-show-matches matches exact-match-p))))))
 
+;;;###autoload
 (defun tgt-toggle ()
   (interactive)
   (if buffer-file-truename  
