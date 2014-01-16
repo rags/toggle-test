@@ -22,6 +22,7 @@ Installation
 Toogle test is available on Marmalade repo to install it, simple run `M-x package-install` and specify `toggle-test` as the package. You will to need to have [marmalade repo](http://marmalade-repo.org/) included.
 
 **Programmatic install:**
+
 You can also programmatically install toggle-test as follows (This can be embedded in the init file):
 ```lisp
 
