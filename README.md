@@ -25,7 +25,6 @@ Toogle test is available on Marmalade repo to install it, simple run `M-x packag
 
 You can also programmatically install toggle-test as follows (This can be embedded in the init file):
 ```lisp
-
 (require 'package)
 (add-to-list 'package-archives
          '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -36,14 +35,11 @@ You can also programmatically install toggle-test as follows (This can be embedd
 
 **Manual Install:**
 
-
 To install test toggle, simply get the code from github.
 ```bash
-git clone git://github.com/rags/toggle-test.git
-```
+> git clone git://github.com/rags/toggle-test.git
 or
-```bash
-git submodule add git://github.com/rags/toggle-test.git ~/emacs.d/plugins/toggle-test
+> git submodule add git://github.com/rags/toggle-test.git ~/emacs.d/plugins/toggle-test
 ```
 
 And add the following lines to your [initialization file](http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html).
