@@ -15,8 +15,27 @@ Test Toggle is similar to test toggle functionality provided by IntelliJ and oth
 * You can work with multiple such projects at the same time.
 
 
-Installing
------------
+Installation
+------------
+**Install using ELPA:**
+
+Toogle test is available on Marmalade repo to install it, simple run `M-x package-install` and specify `toggle-test` as the package. You will to need to have [marmalade repo](http://marmalade-repo.org/) included.
+
+**Programmatic install:**
+You can also programmatically install toggle-test as follows (This can be embedded in the init file):
+```lisp
+
+(require 'package)
+(add-to-list 'package-archives
+         '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
+(if (not (package-installed-p 'toggle-test))
+      (package-install 'toggle-test))
+```
+
+**Manual Install:**
+
+
 To install test toggle, simply get the code from github.
 ```bash
 git clone git://github.com/rags/toggle-test.git
