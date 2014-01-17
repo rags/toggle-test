@@ -35,11 +35,11 @@ You can also programmatically install toggle-test as follows (This can be embedd
 
 **Manual Install:**
 
-To install test toggle, simply get the code from github.
+To install test toggle, simply get the code from github or marmalade.
 ```bash
 > git clone git://github.com/rags/toggle-test.git
-or
-> git submodule add git://github.com/rags/toggle-test.git ~/emacs.d/plugins/toggle-test
+OR
+> wget http://marmalade-repo.org/packages/toggle-test-1.0.1.el
 ```
 
 And add the following lines to your [initialization file](http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html).
