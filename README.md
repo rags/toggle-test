@@ -17,7 +17,7 @@ Test Toggle is similar to test toggle functionality provided by IntelliJ and oth
 
 Installation
 ------------
-**Install using ELPA:**
+**Install using [ELPA](http://www.emacswiki.org/wiki/ELPA):**
 
 Toogle test is available on Marmalade repo to install it, simple run `M-x package-install toggle-test`. You will to need to have [marmalade repo](http://marmalade-repo.org/) included. The marmalade repo/instructions are [here](http://marmalade-repo.org/packages/toggle-test)
 
