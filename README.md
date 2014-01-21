@@ -204,5 +204,5 @@ License
 --------
 [GNU General Public License](http://www.gnu.org/licenses/)
 
-Copyright (C) 2013 [Raghunandan Rao](mailto:r.raghunandan@gmail.com)
+Copyright (C) 2014 [Raghunandan Rao](mailto:r.raghunandan@gmail.com)
 
