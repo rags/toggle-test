@@ -1,6 +1,6 @@
 ;;; toggle-test.el --- Toggle between source and test files. It is language agnostic and creates source/test files if they don't exist.
 
-;; Copyright (C) 2013 Raghunandan Rao
+;; Copyright (C) 2014 Raghunandan Rao
 
 ;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
 ;; Keywords: tdd test toggle productivity
