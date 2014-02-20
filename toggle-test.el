@@ -1,4 +1,4 @@
-;;; toggle-test.el --- Toggle between source and test files. It is language agnostic and creates source/test files if they don't exist.
+;;; toggle-test.el --- Toggle between source and test files in various programming languages
 
 ;; Copyright (C) 2014 Raghunandan Rao
 
