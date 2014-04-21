@@ -19,7 +19,7 @@ Installation
 ------------
 **Install using [ELPA](http://www.emacswiki.org/wiki/ELPA):**
 
-Toogle test is available on Marmalade repo to install it, simple run `M-x package-install toggle-test`. You will to need to have [marmalade repo](http://marmalade-repo.org/) included. The marmalade repo/instructions are [here](http://marmalade-repo.org/packages/toggle-test)
+Toogle test is available on [Marmalade](http://marmalade-repo.org/packages/toggle-test) and [Mepla](http://melpa.milkbox.net/#/toggle-test). Once you have one of the repos included run `M-x package-install toggle-test`.
 
 **Programmatic install:**
 
@@ -27,7 +27,8 @@ You can also programmatically install toggle-test as follows (This can be embedd
 ```lisp
 (require 'package)
 (add-to-list 'package-archives
-         '("marmalade" . "http://marmalade-repo.org/packages/"))
+         '("marmalade" . "http://marmalade-repo.org/packages/") ;include marmaldade
+         '("melpa" . "http://melpa.milkbox.net/packages/")) ;include melpa
 (package-initialize)
 (if (not (package-installed-p 'toggle-test))
       (package-install 'toggle-test))
