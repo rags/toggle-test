@@ -4,7 +4,7 @@
 
 ;; Author: Raghunandan Rao <r.raghunandan@gmail.com>
 ;; Keywords: tdd test toggle productivity
-;; Version: 1.0.1
+;; Version: 1.0.2
 ;; Url: https://github.com/rags/toggle-test
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 ;;; Change log:
 ;; - 1.0 - Initial release
 ;; - 1.0.1 - autoloads added
+;; - 1.0.2 - swapped order of detecting src and test to handle cases where test is subdirectory of src
 
 ;;; Code:
 
@@ -110,10 +111,10 @@ One entry per project that provides naming convention and folder structure"
 (defun tgt-find-project-file-in-dirs (file proj)
   (assert (tgt-proj-prop :src-dirs proj) nil "Source directory not configured")
   (assert (tgt-proj-prop :test-dirs proj) nil "Test directory not configured")
-  (let ((src-file-rel-path (tgt-relative-file-path file proj :src-dirs)))
-    (if src-file-rel-path 
-	(values src-file-rel-path 'nil)
-      (values 'nil (tgt-relative-file-path file proj :test-dirs)))))
+  (let ((test-file-rel-path (tgt-relative-file-path file proj :test-dirs)))
+    (if test-file-rel-path 
+	(values 'nil test-file-rel-path)
+      (values (tgt-relative-file-path file proj :src-dirs) 'nil))))
 
 
 (defun tgt-find-match (file) 
@@ -123,12 +124,13 @@ One entry per project that provides naming convention and folder structure"
 	       (src-file-rel-path test-file-rel-path) 
 	       (tgt-find-project-file-in-dirs file proj)
 	     (cond
-	      (src-file-rel-path (tgt-all-toggle-paths 
-							  src-file-rel-path proj :test-dirs 
-							  #'tgt-possible-test-file-names))
 	      (test-file-rel-path (tgt-all-toggle-paths 
 							   test-file-rel-path proj :src-dirs 
 							   #'tgt-possible-src-file-names))
+	      (src-file-rel-path (tgt-all-toggle-paths 
+							  src-file-rel-path proj :test-dirs 
+							  #'tgt-possible-test-file-names))
+	      
 	      (t (message "File '%s' in project '%s' is not part src-dirs or test-dirs"
 			  file (tgt-root-dir proj)) 'nil))))
 	  (t (message "File '%s' not part of any project. Have you defined a project?" file) 

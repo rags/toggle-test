@@ -33,6 +33,19 @@
 				 (:test-suffixes "$Spec" "Spec" "Test" "$Test")))
   tgt-projects)
 
+(ert-deftest should-handle-test-subdirs ()
+  (setq tgt-projects `(((:root-dir "/tmp/projects/python-proj") 
+				 (:src-dirs "src") (:test-dirs "src/tests") 
+				 (:test-prefixes "test_"))))
+  (should (equal `(,(file-truename "/tmp/projects/python-proj/src/foo/blah.py"))
+				   (tgt-find-match
+					(file-truename "/tmp/projects/python-proj/src/tests/foo/test_blah.py"))))
+  (should (equal `(,(file-truename "/tmp/projects/python-proj/src/tests/test_foo.py"))
+				   (tgt-find-match 
+					(file-truename "/tmp/projects/python-proj/src/foo.py"))))
+	
+
+)
 
 (ert-deftest should-identify-relative-file-paths ()
   (multiple-value-bind (scala-proj py-proj) (setup-test-projects)
